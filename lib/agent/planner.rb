@@ -2,28 +2,31 @@
 
 module Agent
   # Single-shot planner that generates task plans
-  class Planner
+  # Uses ollama-client /generate endpoint
+  # Inherits from AgentRuntime::Planner for FSM integration
+  class Planner < AgentRuntime::Planner
     def initialize(client)
+      super()
       @client = client
     end
 
-    def run(task)
-      prompt = <<~PROMPT
-        You are a coding task planner.
-        Given the task below, output a JSON plan.
-
-        Rules:
-        - Do NOT suggest writing files directly
-        - Use read/search first
-        - Use apply_patch for edits
-        - Validate syntax after edits
-
-        Task:
-        #{task}
-      PROMPT
-
+    def call(input, state: nil) # rubocop:disable Lint/UnusedMethodArgument
       @client.generate(
-        prompt: prompt,
+        prompt: <<~PROMPT,
+          You are a coding task planner.
+
+          Output a JSON plan describing:
+          - what files to inspect
+          - what edits are needed (high level)
+
+          Rules:
+          - Never suggest writing files directly
+          - All edits must use apply_patch
+          - Validation is mandatory
+
+          Task:
+          #{input}
+        PROMPT
         format: {
           type: "object",
           required: ["intent"],
