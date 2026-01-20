@@ -1,17 +1,28 @@
+GIT
+  remote: https://github.com/shubhamtaywade82/agent-runtime.git
+  revision: b4b1669cead8ffd4fe0ad38561ddf02b6bd1c001
+  specs:
+    agent_runtime (0.2.0)
+      ollama-client (>= 0.1.0)
+
+GIT
+  remote: https://github.com/shubhamtaywade82/ollama-client.git
+  revision: 3d0c5a18be2c4f32187880b8679f0e406084a7a2
+  specs:
+    ollama-client (0.2.4)
+      bigdecimal
+      json-schema (~> 4.0)
+
 PATH
   remote: .
   specs:
     coding-agent (0.1.0)
-      agent_runtime (~> 0.1)
-      ollama-client (~> 0.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
     addressable (2.8.8)
       public_suffix (>= 2.0.2, < 8.0)
-    agent_runtime (0.2.0)
-      ollama-client (>= 0.1.0)
     ast (2.4.3)
     bigdecimal (4.0.1)
     date (3.5.1)
@@ -27,9 +38,6 @@ GEM
       addressable (>= 2.8)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
-    ollama-client (0.2.4)
-      bigdecimal
-      json-schema (~> 4.0)
     parallel (1.27.0)
     parser (3.3.10.1)
       ast (~> 2.4.1)
@@ -101,8 +109,10 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  agent_runtime!
   coding-agent!
   irb
+  ollama-client!
   rake (~> 13.0)
   rspec (~> 3.0)
   rubocop (~> 1.21)
@@ -112,7 +122,7 @@ DEPENDENCIES
 
 CHECKSUMS
   addressable (2.8.8) sha256=7c13b8f9536cf6364c03b9d417c19986019e28f7c00ac8132da4eb0fe393b057
-  agent_runtime (0.2.0) sha256=f4087e08a0ffe4b058dcae39c76fa67e5a8faf6adbe0c9b22e85ec98e25304a4
+  agent_runtime (0.2.0)
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   bigdecimal (4.0.1) sha256=8b07d3d065a9f921c80ceaea7c9d4ae596697295b584c296fe599dd0ad01c4a7
   coding-agent (0.1.0)
@@ -125,7 +135,7 @@ CHECKSUMS
   json-schema (4.3.1) sha256=d5e68dc32b94408d0b06ad04f9382ccbb6fe5a44910e066f8547f56c471a7825
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
-  ollama-client (0.2.4) sha256=68b3905d8fc54579afdca4daef68cb81920cec5a7a11e91f0e1decfb7fbef642
+  ollama-client (0.2.4)
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.10.1) sha256=06f6a725d2cd91e5e7f2b7c32ba143631e1f7c8ae2fb918fc4cebec187e6a688
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
