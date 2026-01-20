@@ -3,9 +3,47 @@
 
 require "bundler/setup"
 require "coding/agent"
+require "json"
+
+# Load step-by-step helper
+require_relative "../lib/coding_agent/step_by_step"
+
+# Helper methods for console
+def step_by_step(task, model: "qwen2.5-coder:7b")
+  puts "\n" + "=" * 80
+  puts "Step-by-Step Execution Helper"
+  puts "=" * 80
+  puts "\nUsage:"
+  puts "  runner = step_by_step('your task here')"
+  puts "  runner.run_step  # Execute one step"
+  puts "  runner.run_all   # Execute all steps with pauses"
+  puts "  runner.inspect_state  # Show current state"
+  puts "\n" + "=" * 80
+
+  CodingAgent::StepByStep.new(task, model: model)
+end
+
+def quick_step(task, model: "qwen2.5-coder")
+  runner = step_by_step(task, model: model)
+  runner.run_step
+  runner
+end
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
+
+puts "\n" + "=" * 80
+puts "Coding Agent Console"
+puts "=" * 80
+puts "\nAvailable helpers:"
+puts "  step_by_step('task')  - Create step-by-step runner"
+puts "  quick_step('task')    - Execute one step and return runner"
+puts "\nExample:"
+puts "  runner = step_by_step('create Calculator class')"
+puts "  runner.run_step  # See first step"
+puts "  runner.run_step  # See second step"
+puts "  runner.inspect_state  # Check state"
+puts "\n" + "=" * 80
 
 require "irb"
 IRB.start(__FILE__)

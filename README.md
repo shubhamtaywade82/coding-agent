@@ -362,6 +362,14 @@ require "coding_agent"
 CodingAgent.run("Refactor the authentication service")
 ```
 
+---
+
+## Documentation
+
+- **[HOW_IT_WORKS.md](HOW_IT_WORKS.md)** - Detailed explanation of the execution flow, architecture, and how the agent processes tasks
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Technical architecture and layer responsibilities
+- **[USAGE.md](USAGE.md)** - Usage guide and examples
+
 **See [USAGE.md](USAGE.md) for detailed usage guide.**
 
 ---

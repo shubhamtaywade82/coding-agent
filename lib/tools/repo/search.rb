@@ -2,6 +2,7 @@
 
 require "pathname"
 require_relative "../base"
+require_relative "../playground_helper"
 
 module Tools
   module Repo
@@ -15,13 +16,22 @@ module Tools
 
       def self.call(args, _state:)
         query = args.fetch("query")
-        path = args.fetch("path", ".")
+        # Default to playground directory
+        path = args.fetch("path", PlaygroundHelper::PLAYGROUND_DIR)
         case_sensitive = args.fetch("case_sensitive", false)
 
-        full_path = File.expand_path(path)
+        # Convert to absolute path from root, scoped to playground
+        base_path = if path == "."
+                      PlaygroundHelper.playground_root
+                    else
+                      PlaygroundHelper.normalize_to_absolute(path)
+                    end
+
+        # Ensure we're in playground
+        PlaygroundHelper.validate_playground_path(base_path)
         results = []
 
-        Dir.glob(File.join(full_path, "**/*"), File::FNM_DOTMATCH).each do |file_path|
+        Dir.glob(File.join(base_path, "**/*"), File::FNM_DOTMATCH).each do |file_path|
           next unless File.file?(file_path)
           next if excluded?(file_path)
 
@@ -30,9 +40,9 @@ module Tools
               line_number = index + 1
               next unless case_sensitive ? line.include?(query) : line.downcase.include?(query.downcase)
 
-              relative_path = Pathname.new(file_path).relative_path_from(Pathname.new(Dir.pwd)).to_s
+              absolute_path = File.expand_path(file_path)
               results << {
-                file: relative_path,
+                file: absolute_path,
                 line: line_number,
                 content: line.chomp
               }

@@ -2,6 +2,7 @@
 
 require "fileutils"
 require_relative "../base"
+require_relative "../playground_helper"
 
 module Tools
   module FS
@@ -13,15 +14,18 @@ module Tools
 
       def self.call(args, _state:)
         path = args.fetch("path")
-        content = args.fetch("content")
-        full_path = File.expand_path(path)
+        content = args.fetch("content") do
+          raise ArgumentError, "Missing required parameter: 'content'. create_file requires both 'path' and 'content'. If the file already exists, use apply_patch instead."
+        end
 
-        # Security: prevent directory traversal
-        project_root = File.expand_path(Dir.pwd)
-        raise ArgumentError, "Path outside project root" unless full_path.start_with?(project_root)
+        # Convert to absolute path from root, scoped to playground
+        full_path = PlaygroundHelper.normalize_to_absolute(path)
+
+        # Security: restrict to playground directory
+        PlaygroundHelper.validate_playground_path(full_path)
 
         # Fail if file exists
-        raise ArgumentError, "File already exists: #{path}" if File.exist?(full_path)
+        raise ArgumentError, "File already exists: #{full_path}" if File.exist?(full_path)
 
         # Create directory if needed
         dir = File.dirname(full_path)
@@ -30,7 +34,7 @@ module Tools
         # Write file
         File.write(full_path, content)
 
-        { status: "created", path: path }
+        { status: "created", path: full_path }
       end
     end
   end

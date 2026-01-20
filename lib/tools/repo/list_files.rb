@@ -2,6 +2,7 @@
 
 require "pathname"
 require_relative "../base"
+require_relative "../playground_helper"
 
 module Tools
   module Repo
@@ -14,19 +15,31 @@ module Tools
       end
 
       def self.call(args, _state:)
-        path = args.fetch("path", ".")
+        # Default to playground directory
+        path = args.fetch("path", PlaygroundHelper::PLAYGROUND_DIR)
         glob = args.fetch("glob", "**/*")
 
-        full_path = File.expand_path(path)
-        pattern = File.join(full_path, glob)
+        # Convert to absolute path from root, scoped to playground
+        base_path = if path == "."
+                      PlaygroundHelper.playground_root
+                    else
+                      PlaygroundHelper.normalize_to_absolute(path)
+                    end
+
+        # Ensure the base directory is in playground
+        PlaygroundHelper.validate_playground_path(base_path)
+        pattern = File.join(base_path, glob)
 
         files = Dir.glob(pattern, File::FNM_DOTMATCH)
                    .select { |f| File.file?(f) }
                    .reject { |f| excluded?(f) }
-                   .map { |f| Pathname.new(f).relative_path_from(Pathname.new(Dir.pwd)).to_s }
+                   .map { |f| File.expand_path(f) }
                    .sort
 
-        { files: files }
+        # Return both absolute and relative paths for clarity
+        relative_files = files.map { |f| f.sub(/#{Regexp.escape(PlaygroundHelper.playground_root)}\/?/, "") }
+
+        { files: files, relative_files: relative_files, count: files.count }
       end
 
       def self.excluded?(path)

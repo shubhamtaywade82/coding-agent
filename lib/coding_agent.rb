@@ -10,8 +10,8 @@ require_relative "coding/agent/version"
 
 # Agent components
 require_relative "agent/planner"
+require_relative "agent/policy"
 require_relative "agent/executor"
-require_relative "agent/policies"
 
 # Tool registry
 require_relative "tools/index"
@@ -27,22 +27,54 @@ module CodingAgent
   class Error < StandardError; end
 
   # Main entry point that wires ollama-client + agent_runtime
-  def self.run(task, model: "qwen2.5-coder", client: nil)
+  def self.run(task, model: "qwen2.5-coder:7b", client: nil)
     # Create Ollama client
-    ollama = client || Ollama::Client.new(model: model)
+    ollama = client || Ollama::Client.new
 
-    # Create planner and executor (they use ollama-client)
-    planner = Agent::Planner.new(ollama)
-    executor = Agent::Executor.new(ollama)
+    # Create planner with schema and prompt builder
+    planner = Agent::Planner.new(client: ollama, model: model)
 
-    # Wire everything through agent_runtime
-    # The runtime owns the FSM, loop, and tool orchestration
-    AgentRuntime::Runner.new(
+    # Create policy
+    policy = Agent::Policy.new
+
+    # Create tool registry from tools
+    tool_registry = Agent::Executor.build_tool_registry
+
+    # Create executor
+    executor = Agent::Executor.new(tool_registry: tool_registry)
+
+    # Create state
+    state = AgentRuntime::State.new
+
+    # Create agent with max_iterations limit
+    agent = AgentRuntime::Agent.new(
       planner: planner,
+      policy: policy,
       executor: executor,
-      tools: Tools::ALL,
-      policies: Agent::Policies
-    ).run(task)
+      state: state,
+      max_iterations: 25
+    )
+
+    # Run the agent
+    $stdout.puts "\n" + "=" * 60
+    $stdout.puts "🚀 Starting Coding Agent"
+    $stdout.puts "=" * 60
+    $stdout.puts "Task: #{task}"
+    $stdout.puts "Model: #{model}"
+    $stdout.puts "Max iterations: 25"
+    $stdout.puts "=" * 60 + "\n"
+
+    begin
+      agent.run(initial_input: task)
+      $stdout.puts "\n" + "=" * 60
+      $stdout.puts "✅ Agent completed successfully"
+      $stdout.puts "=" * 60
+    rescue StandardError => e
+      $stdout.puts "\n" + "=" * 60
+      $stdout.puts "❌ Agent failed: #{e.class} - #{e.message}"
+      $stdout.puts "=" * 60
+      raise
+    end
   end
 
   # Get all available tools
