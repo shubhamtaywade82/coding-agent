@@ -13,7 +13,7 @@ module Tools
         "list_files"
       end
 
-      def self.call(args)
+      def self.call(args, _state:)
         path = args.fetch("path", ".")
         glob = args.fetch("glob", "**/*")
 

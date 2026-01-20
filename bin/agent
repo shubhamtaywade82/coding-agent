@@ -3,9 +3,7 @@
 
 require_relative "../lib/coding_agent"
 
-query = ARGV.join(" ")
-abort("Usage: agent <task>") if query.empty?
+task = ARGV.join(" ").strip
+abort("Usage: agent <task>") if task.empty?
 
-# Run the agent
-# This wires ollama-client + agent_runtime automatically
-CodingAgent.run(query)
+CodingAgent.run(task)

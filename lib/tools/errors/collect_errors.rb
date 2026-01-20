@@ -10,7 +10,7 @@ module Tools
         "collect_errors"
       end
 
-      def self.call(_args)
+      def self.call(_, _state:)
         errors = []
 
         # Collect syntax errors from recent validation runs

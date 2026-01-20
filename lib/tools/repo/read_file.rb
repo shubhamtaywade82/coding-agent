@@ -11,7 +11,7 @@ module Tools
         "read_file"
       end
 
-      def self.call(args)
+      def self.call(args, _state:)
         path = args.fetch("path")
         full_path = File.expand_path(path)
 

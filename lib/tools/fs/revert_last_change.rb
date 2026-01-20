@@ -11,7 +11,7 @@ module Tools
         "revert_last_change"
       end
 
-      def self.call(_args)
+      def self.call(_, _state:)
         success = Utils::Git.revert_all
 
         {

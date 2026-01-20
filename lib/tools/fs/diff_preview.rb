@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "../base"
-require_relative "../../utils/git"
 
 module Tools
   module FS
@@ -11,15 +10,8 @@ module Tools
         "diff_preview"
       end
 
-      def self.call(_args)
-        diff = Utils::Git.diff
-        status = Utils::Git.status
-
-        {
-          diff: diff,
-          status: status,
-          has_changes: !diff.empty?
-        }
+      def self.call(_, _state:)
+        { diff: `git diff` }
       end
     end
   end

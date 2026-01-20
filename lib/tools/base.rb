@@ -7,7 +7,7 @@ module Tools
       raise NotImplementedError, "#{self} must implement .name"
     end
 
-    def self.call(_args)
+    def self.call(_args, _state:)
       raise NotImplementedError, "#{self} must implement .call"
     end
   end

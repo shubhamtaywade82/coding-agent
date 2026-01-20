@@ -11,7 +11,7 @@ module Tools
         "create_file"
       end
 
-      def self.call(args)
+      def self.call(args, _state:)
         path = args.fetch("path")
         content = args.fetch("content")
         full_path = File.expand_path(path)

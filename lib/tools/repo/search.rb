@@ -13,7 +13,7 @@ module Tools
         "search"
       end
 
-      def self.call(args)
+      def self.call(args, _state:)
         query = args.fetch("query")
         path = args.fetch("path", ".")
         case_sensitive = args.fetch("case_sensitive", false)

@@ -14,7 +14,7 @@ require_relative "agent/executor"
 require_relative "agent/policies"
 
 # Tool registry
-require_relative "tools"
+require_relative "tools/index"
 
 # Utilities
 require_relative "utils/file_hash"

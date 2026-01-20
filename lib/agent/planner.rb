@@ -15,17 +15,16 @@ module Agent
         prompt: <<~PROMPT,
           You are a coding task planner.
 
-          Output a JSON plan describing:
-          - what files to inspect
-          - what edits are needed (high level)
-
           Rules:
-          - Never suggest writing files directly
-          - All edits must use apply_patch
-          - Validation is mandatory
+          - Do NOT write code directly
+          - Always explore files first
+          - Use apply_patch for edits
+          - Syntax validation is mandatory
 
           Task:
           #{input}
+
+          Output a concise JSON plan.
         PROMPT
         format: {
           type: "object",
