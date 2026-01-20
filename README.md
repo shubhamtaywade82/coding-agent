@@ -295,7 +295,7 @@ FINALIZE
 | Search           | ✅        |
 | Patch-based edit | ✅        |
 | Syntax check     | ✅        |
-| Lint feedback    | ⚠️       |
+| Lint feedback    | ⚠️        |
 | Diff preview     | ✅        |
 | Revert           | ✅        |
 
@@ -335,15 +335,34 @@ Or install it yourself as:
 gem install coding-agent
 ```
 
+**Prerequisites:**
+- Ollama installed and running (`ollama serve`)
+- Model pulled (`ollama pull qwen2.5-coder`)
+- Ruby 3.0+
+
 ---
 
-## Usage
+## Quick Start
+
+### Command Line
 
 ```bash
-coding-agent [command] [options]
+# Navigate to your project
+cd /path/to/your/project
+
+# Run the agent
+bin/agent "Add a User model with email validation"
 ```
 
-See `coding-agent --help` for available commands.
+### Programmatic
+
+```ruby
+require "coding_agent"
+
+CodingAgent.run("Refactor the authentication service")
+```
+
+**See [USAGE.md](USAGE.md) for detailed usage guide.**
 
 ---
 
