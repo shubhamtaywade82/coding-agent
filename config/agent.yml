@@ -1,0 +1,46 @@
+# Coding Agent Configuration
+
+# Agent runtime settings
+agent:
+  max_iterations: 100
+  max_file_edits: 50
+  stop_on_syntax_error: true
+  max_lint_errors: 10
+
+# Tool settings
+tools:
+  # Excluded patterns for file operations
+  excluded_patterns:
+    - .git
+    - node_modules
+    - vendor
+    - bundle
+    - .bundle
+    - tmp
+    - log
+
+  # Protected files that cannot be edited
+  protected_files:
+    - Gemfile.lock
+    - package-lock.json
+    - yarn.lock
+
+# Validation settings
+validation:
+  # Run syntax check after every edit
+  check_after_edit: true
+
+  # Languages supported
+  languages:
+    - ruby
+    - python
+    - javascript
+    - typescript
+
+# Linting settings
+linting:
+  # Run lint check after syntax validation
+  check_after_syntax: true
+
+  # Auto-fix lint errors (dangerous - use with caution)
+  auto_fix: false

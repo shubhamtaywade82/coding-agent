@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require_relative "../lib/coding_agent"
+
+query = ARGV.join(" ")
+abort("Usage: agent <task>") if query.empty?
+
+# NOTE: This requires an external agent_runtime and client
+# For now, this shows the structure
+puts "Task: #{query}"
+puts "Tools available: #{CodingAgent.tools.count}"
+puts "This requires agent_runtime and a client (e.g., Ollama) to be configured"
